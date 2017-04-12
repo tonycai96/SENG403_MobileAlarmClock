@@ -18,7 +18,7 @@ using Windows.UI.Xaml.Navigation;
 namespace SENG403_AlarmClock_V3
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// This page allows the user to edit the alarm settings.
     /// </summary>
     public sealed partial class SettingsPage : Page
     {

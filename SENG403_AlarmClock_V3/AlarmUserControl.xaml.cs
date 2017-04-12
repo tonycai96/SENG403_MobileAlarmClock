@@ -78,24 +78,24 @@ namespace SENG403_AlarmClock_V3
             }
             if (alarm.repeatIntervalDays == 7)
             {
-                if (alarm.defaultAlarmTime.DayOfWeek == DayOfWeek.Monday) AlarmTypeLabel.Text = "Monday";
-                if (alarm.defaultAlarmTime.DayOfWeek == DayOfWeek.Tuesday) AlarmTypeLabel.Text = "Tuesday";
-                if (alarm.defaultAlarmTime.DayOfWeek == DayOfWeek.Wednesday) AlarmTypeLabel.Text = "Wednesday";
-                if (alarm.defaultAlarmTime.DayOfWeek == DayOfWeek.Thursday) AlarmTypeLabel.Text = "Thursday";
-                if (alarm.defaultAlarmTime.DayOfWeek == DayOfWeek.Friday) AlarmTypeLabel.Text = "Friday";
-                if (alarm.defaultAlarmTime.DayOfWeek == DayOfWeek.Saturday) AlarmTypeLabel.Text = "Saturday";
-                if (alarm.defaultAlarmTime.DayOfWeek == DayOfWeek.Sunday) AlarmTypeLabel.Text = "Sunday";
-                AlarmTimeLabel.Text = alarm.defaultAlarmTime.TimeOfDay.ToString();
+                if (alarm.defaultNotificationTime.DayOfWeek == DayOfWeek.Monday) AlarmTypeLabel.Text = "Monday";
+                if (alarm.defaultNotificationTime.DayOfWeek == DayOfWeek.Tuesday) AlarmTypeLabel.Text = "Tuesday";
+                if (alarm.defaultNotificationTime.DayOfWeek == DayOfWeek.Wednesday) AlarmTypeLabel.Text = "Wednesday";
+                if (alarm.defaultNotificationTime.DayOfWeek == DayOfWeek.Thursday) AlarmTypeLabel.Text = "Thursday";
+                if (alarm.defaultNotificationTime.DayOfWeek == DayOfWeek.Friday) AlarmTypeLabel.Text = "Friday";
+                if (alarm.defaultNotificationTime.DayOfWeek == DayOfWeek.Saturday) AlarmTypeLabel.Text = "Saturday";
+                if (alarm.defaultNotificationTime.DayOfWeek == DayOfWeek.Sunday) AlarmTypeLabel.Text = "Sunday";
+                AlarmTimeLabel.Text = alarm.defaultNotificationTime.TimeOfDay.ToString();
             }
             else if (alarm.repeatIntervalDays == 1)
             {
                 AlarmTypeLabel.Text = "Daily";
-                AlarmTimeLabel.Text = alarm.defaultAlarmTime.TimeOfDay.ToString();
+                AlarmTimeLabel.Text = alarm.defaultNotificationTime.TimeOfDay.ToString();
             }
             else if (alarm.repeatIntervalDays == -1)
             {
                 AlarmTypeLabel.Text = "No Repeat";
-                AlarmTimeLabel.Text = alarm.defaultAlarmTime.ToString();
+                AlarmTimeLabel.Text = alarm.defaultNotificationTime.ToString();
             }
             AlarmLabel.Text = alarm.label;
         }
@@ -140,8 +140,8 @@ namespace SENG403_AlarmClock_V3
         /// <param name="currentTime"></param>
         internal void requestAlarmWithCheck(DateTime currentTime)
         {
-            if (!alarm.enabled || alarm.currentState != AlarmState.NONE) return;
-            if (alarm.notifyTime.CompareTo(currentTime) <= 0)
+            if (!alarm.enabled || alarm.currentState != AlarmState.IDLE) return;
+            if (alarm.currentNotificationTime.CompareTo(currentTime) <= 0)
             {
                 if (!MainPage.ALARM_NOTIFICATION_OPEN)
                 {
