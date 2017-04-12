@@ -24,7 +24,6 @@ namespace SENG403_AlarmClock_V3
     public sealed partial class MainPage : Page
     {
         public static DateTime currentTime;
-        public static double snoozeTime = 1.0;
 
         public DispatcherTimer dispatcherTimer = new DispatcherTimer();
 
@@ -32,11 +31,6 @@ namespace SENG403_AlarmClock_V3
         /// The name of the file which stores alarm information.
         /// </summary>
         public static string ALARMS_FILE = "alarms.txt";
-
-        /// <summary>
-        /// Whether the alarm notification is opened or not (required for handling multiple alarms).
-        /// </summary>
-        public static bool ALARM_NOTIFICATION_OPEN = false;
 
         public MainPage()
         {
@@ -96,7 +90,7 @@ namespace SENG403_AlarmClock_V3
                 if (u.alarm.currentState == AlarmState.FIRST_TO_GO_OFF)
                 {
                     openAlarmNotificationWindow(u.alarm.label);
-                    ALARM_NOTIFICATION_OPEN = true;
+                    AlarmsManager.IS_ALARM_NOTIFICATION_OPEN = true;
                 }
             }
         }
@@ -167,7 +161,7 @@ namespace SENG403_AlarmClock_V3
         /// General user input handling
         private void AddAlarmButton_Click(object sender, RoutedEventArgs e)
         {
-            AlarmUserControl alarmControl = new AlarmUserControl(this, new Alarm(snoozeTime));
+            AlarmUserControl alarmControl = new AlarmUserControl(this, new Alarm(AlarmsManager.SNOOZE_TIME));
             AlarmList_Panel.Children.Add(alarmControl);
         }
 
@@ -271,7 +265,7 @@ namespace SENG403_AlarmClock_V3
                     u.alarm.updateAlarmTime();
             }
             AlarmNotification.Visibility = Visibility.Collapsed;
-            MainPage.ALARM_NOTIFICATION_OPEN = false;
+            AlarmsManager.IS_ALARM_NOTIFICATION_OPEN = false;
         }
 
         private void SnoozeButtonClick(object sender, RoutedEventArgs e)
@@ -280,7 +274,7 @@ namespace SENG403_AlarmClock_V3
                 if (u.alarm.currentState == AlarmState.FIRST_TO_GO_OFF)
                     u.alarm.snooze();
             AlarmNotification.Visibility = Visibility.Collapsed;
-            MainPage.ALARM_NOTIFICATION_OPEN = false;
+            AlarmsManager.IS_ALARM_NOTIFICATION_OPEN = false;
         }
     }
 }

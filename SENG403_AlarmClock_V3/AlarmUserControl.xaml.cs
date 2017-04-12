@@ -143,10 +143,10 @@ namespace SENG403_AlarmClock_V3
             if (!alarm.enabled || alarm.currentState != AlarmState.IDLE) return;
             if (alarm.currentNotificationTime.CompareTo(currentTime) <= 0)
             {
-                if (!MainPage.ALARM_NOTIFICATION_OPEN)
+                if (!AlarmsManager.IS_ALARM_NOTIFICATION_OPEN)
                 {
                     alarm.playAlarmSound();
-                    MainPage.ALARM_NOTIFICATION_OPEN = true;
+                    AlarmsManager.IS_ALARM_NOTIFICATION_OPEN = true;
                     mainPage.openAlarmNotificationWindow(alarm.label);
                     alarm.currentState = AlarmState.FIRST_TO_GO_OFF;
                 }

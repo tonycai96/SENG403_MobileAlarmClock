@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Alarm.cs" />
+    <Compile Include="AlarmsManager.cs" />
     <Compile Include="AlarmUserControl.xaml.cs">
       <DependentUpon>AlarmUserControl.xaml</DependentUpon>
     </Compile>

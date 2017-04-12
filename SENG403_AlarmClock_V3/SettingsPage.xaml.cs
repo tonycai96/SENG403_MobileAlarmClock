@@ -29,7 +29,7 @@ namespace SENG403_AlarmClock_V3
 
         private void ClickDone(object sender, RoutedEventArgs e)
         {
-            MainPage.snoozeTime = Convert.ToDouble(SnoozeTimeTextBox.Text);
+            AlarmsManager.SNOOZE_TIME = Convert.ToDouble(SnoozeTimeTextBox.Text);
             Frame.Navigate(typeof(MainPage));
         }
 
