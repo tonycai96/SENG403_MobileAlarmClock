@@ -35,18 +35,18 @@
                 <BitmapImage  UriSource="../../images/logo.jpg" />
             </Image.Source>
         </Image>
-        <Grid x:Name="EditAlarmPage" Visibility="Visible">
+        <Grid x:Name="EditAlarmPage" Visibility="Collapsed">
             <Rectangle Fill="Black" HorizontalAlignment="Left" Height="640" Stroke="Black" VerticalAlignment="Top" Width="360"/>
             <Grid x:Name="repeatedAlarms" Visibility="Collapsed">
                 <Grid Margin="69,201,28,281">
-                    <RadioButton x:Name="Monday" Foreground ="White" Content="Monday" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,0,0,0"/>
-                    <RadioButton x:Name="Tuesday" Foreground ="White" Content="Tuesday" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,0,0,0"/>
-                    <RadioButton x:Name="Wednesday" Foreground ="White" Content="Wednesday" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,31,0,0"/>
-                    <RadioButton x:Name="Thursday" Foreground ="White" Content="Thursday" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,31,0,0"/>
-                    <RadioButton x:Name="Friday" Content="Friday" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,62,0,0"/>
-                    <RadioButton x:Name="Saturday" Content="Saturday" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,62,0,0"/>
-                    <RadioButton x:Name="Sunday" Content="Sunday" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,93,0,0"/>
-                    <RadioButton x:Name="Daily" Content="Daily" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,93,0,0" IsChecked="True"/>
+                    <CheckBox x:Name="Monday" Foreground ="White" Content="Monday" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,0,0,0"/>
+                    <CheckBox x:Name="Tuesday" Foreground ="White" Content="Tuesday" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,0,0,0"/>
+                    <CheckBox x:Name="Wednesday" Foreground ="White" Content="Wednesday" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,31,0,0"/>
+                    <CheckBox x:Name="Thursday" Foreground ="White" Content="Thursday" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,31,0,0"/>
+                    <CheckBox x:Name="Friday" Content="Friday" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,62,0,0"/>
+                    <CheckBox x:Name="Saturday" Content="Saturday" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,62,0,0"/>
+                    <CheckBox x:Name="Sunday" Content="Sunday" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,93,0,0"/>
+                    <CheckBox x:Name="Daily" Content="Daily" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,93,0,0" IsChecked="True"/>
                 </Grid>
             </Grid>
             <Button x:Name="CancelButton" FontSize="20" Background="#931100" Foreground="White" Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="34,540,0,0" Height="42" Width="140" Click="CancelEditAlarmButtonClicked"/>

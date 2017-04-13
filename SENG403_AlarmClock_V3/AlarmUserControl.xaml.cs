@@ -140,7 +140,7 @@ namespace SENG403_AlarmClock_V3
         /// <param name="currentTime"></param>
         internal void requestAlarmWithCheck(DateTime currentTime)
         {
-            if (!alarm.enabled || alarm.currentState != AlarmState.IDLE) return;
+            if (!AlarmEnabledToggle.IsOn || alarm.currentState != AlarmState.IDLE) return;
             if (alarm.currentNotificationTime.CompareTo(currentTime) <= 0)
             {
                 if (!AlarmsManager.IS_ALARM_NOTIFICATION_OPEN)
@@ -187,7 +187,7 @@ namespace SENG403_AlarmClock_V3
         internal void disable()
         {
             alarm.enabled = false;
-            EnableDisableAlarm_Button.Content = "Enable";
+            AlarmEnabledToggle.IsOn = false;
         }
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace SENG403_AlarmClock_V3
         internal void enable()
         {
             alarm.enabled = true;
-            EnableDisableAlarm_Button.Content = "Disable";
+            AlarmEnabledToggle.IsOn = true;
         }
     }
 }
