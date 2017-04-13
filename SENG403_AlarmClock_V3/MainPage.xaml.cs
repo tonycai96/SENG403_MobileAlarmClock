@@ -24,7 +24,7 @@ namespace SENG403_AlarmClock_V3
     public sealed partial class MainPage : Page
     {
         public static DateTime currentTime;
-
+        public static String[] AlarmSoundsList= new String[] {"Alarm 1", "Alarm 2", "Alarm 3"};
         public DispatcherTimer dispatcherTimer = new DispatcherTimer();
 
         /// <summary>
@@ -35,6 +35,8 @@ namespace SENG403_AlarmClock_V3
         public MainPage()
         {
             InitializeComponent();
+            alarmtoneSelector.ItemsSource = AlarmSoundsList;
+            
             currentTime = DateTime.Now;
             updateTimeDisplay(currentTime);
             dispatcherTimer.Tick += DispatcherTimer_Tick;
@@ -275,6 +277,11 @@ namespace SENG403_AlarmClock_V3
                     u.alarm.snooze();
             AlarmNotification.Visibility = Visibility.Collapsed;
             AlarmsManager.IS_ALARM_NOTIFICATION_OPEN = false;
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

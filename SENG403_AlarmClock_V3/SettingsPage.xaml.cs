@@ -37,5 +37,10 @@ namespace SENG403_AlarmClock_V3
         {
             Frame.Navigate(typeof(MainPage));
         }
+
+        private void TextBlock_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }
