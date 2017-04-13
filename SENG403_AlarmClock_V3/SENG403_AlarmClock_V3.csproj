@@ -117,6 +117,7 @@
   <ItemGroup>
     <Content Include="Assets\missileAlert.wav" />
     <Content Include="Images\background.jpg" />
+    <Content Include="Images\Logo.jpg" />
     <Content Include="Images\menu-icon.png" />
     <Content Include="Images\plus-button-green.png" />
     <Content Include="Images\TurnMyWrenchBabay.png" />
