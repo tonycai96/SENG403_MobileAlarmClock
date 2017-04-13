@@ -44,12 +44,6 @@ namespace SENG403_AlarmClock_V3
         [DataMember]
         public bool enabled { get; set; }
 
-        /// <summary>
-        /// How many days before the alarm goes off again (-1 if the alarm doesn't repeat
-        /// </summary>
-        [DataMember]
-        public int repeatIntervalDays { get; set; }
-
         [DataMember]
         public string label { get; set; }
 
@@ -59,50 +53,18 @@ namespace SENG403_AlarmClock_V3
         [DataMember]
         public AlarmState currentState { get; set;}
 
-        private const string DEFAULT_ALARM_SOUND = @"C:\Users\tcai\Documents\Visual Studio 2015\Projects\SENG403_G6_v2\SENG403_AlarmClock_V2\Sounds\missileAlert.wav";
+        [DataMember]
+        public int alarmNotificationDaysMask { get; set; }
+
+        [DataMember]
+        public bool oneTimeAlarm { get; set; }
+
+        [DataMember]
+        internal int alarmToneIndex = 0;
+
+        private const string DEFAULT_ALARM_SOUND = "missileAlert.wav";
+        
         public MediaPlayer mediaPlayer { get; set; }
-
-        /// <summary>
-        /// Helper method for setting weekly alarms.
-        /// </summary>
-        /// <param name="day">Day of the week</param>
-        /// <param name="alarmTime">Time of day of the alarm</param>
-        internal void setWeeklyAlarm(DayOfWeek day, TimeSpan alarmTime)
-        {
-            enabled = false;
-            initialized = true;
-            repeatIntervalDays = 7;
-            defaultNotificationTime = DateTime.Today.AddDays(day - DateTime.Now.DayOfWeek).Add(alarmTime);
-            if (defaultNotificationTime.CompareTo(DateTime.Now) <= 0)
-                defaultNotificationTime = defaultNotificationTime.AddDays(repeatIntervalDays);
-            currentNotificationTime = defaultNotificationTime;
-        }
-
-        /// <summary>
-        /// Helper method for setting daily alarms.
-        /// </summary>
-        /// <param name="alarmTime">Time of day of the alarm</param>
-        internal void setDailyAlarm(TimeSpan alarmTime)
-        {
-            enabled = false;
-            initialized = true;
-            repeatIntervalDays = 1;
-            defaultNotificationTime = DateTime.Today.Add(alarmTime);
-            if (defaultNotificationTime.CompareTo(DateTime.Now) <= 0)
-                defaultNotificationTime = defaultNotificationTime.AddDays(1);
-            currentNotificationTime = defaultNotificationTime;
-        }
-
-        /// <summary>
-        /// Helper method for setting alarm that only goes off once.
-        /// </summary>
-        /// <param name="dateTime">Date and time of when the alarm should go off. </param>
-        internal void setOneTimeAlarm(DateTime dateTime)
-        {
-            initialized = true;
-            repeatIntervalDays = -1;
-            currentNotificationTime = defaultNotificationTime = dateTime;
-        }
 
         public Alarm(double snoozeTime)
         {
@@ -112,10 +74,12 @@ namespace SENG403_AlarmClock_V3
             this.snoozeTime = snoozeTime;
         }
 
+        private string[] alarmSoundList = new string[] { "missileAlert.wav", "fogHorn.wav", "troll.wav" };
+
         public void playAlarmSound()
         {
             mediaPlayer = new MediaPlayer();
-            Uri pathUri = new Uri("ms-appx:///Assets/missileAlert.wav");
+            Uri pathUri = new Uri("ms-appx:///Assets/" + alarmSoundList[alarmToneIndex]);
             mediaPlayer.Source = MediaSource.CreateFromUri(pathUri);
             mediaPlayer.Play();
         }
@@ -143,15 +107,39 @@ namespace SENG403_AlarmClock_V3
         {
             mediaPlayer.Pause();
             currentState = AlarmState.IDLE;
-            if (repeatIntervalDays != -1)
-            {
-                defaultNotificationTime = defaultNotificationTime.AddDays(repeatIntervalDays);
-                currentNotificationTime = defaultNotificationTime;
-            }
-            else
+            if (oneTimeAlarm)
             {
                 enabled = false;
             }
+            else
+            {
+                int cur = ((int)MainPage.currentTime.DayOfWeek + 1) % 7;
+                while (((1 << cur) & alarmNotificationDaysMask) == 0) cur = (cur + 1) % 7;
+                defaultNotificationTime = defaultNotificationTime.AddDays((cur + 7 - (int)MainPage.currentTime.DayOfWeek) % 7);
+                currentNotificationTime = defaultNotificationTime;
+            }
+        }
+
+        internal void setRepeatingNotificationTime(int mask, DateTime alarmTime)
+        {
+            initialized = true;
+            alarmNotificationDaysMask = mask;
+            defaultNotificationTime = alarmTime;
+            int cur = (int)alarmTime.Date.DayOfWeek;
+            while (((1<<cur) & alarmNotificationDaysMask) == 0)
+            {
+                cur = (cur + 1) % 7;
+                defaultNotificationTime.AddDays(1);
+            }
+            currentNotificationTime = defaultNotificationTime;
+        }
+
+        internal void setOnetimeAlarm(DateTime alarmTime)
+        {
+            oneTimeAlarm = true;
+            initialized = true;
+            alarmNotificationDaysMask = 0;
+            defaultNotificationTime = currentNotificationTime = alarmTime;
         }
     }
 }

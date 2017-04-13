@@ -36,6 +36,7 @@ namespace SENG403_AlarmClock_V3
         {
             InitializeComponent();
             alarmtoneSelector.ItemsSource = AlarmSoundsList;
+            alarmtoneSelector.SelectedIndex = 0;
             
             currentTime = DateTime.Now;
             updateTimeDisplay(currentTime);
@@ -177,6 +178,7 @@ namespace SENG403_AlarmClock_V3
         internal void openEditPage()
         {
             EditAlarmPage.Visibility = Visibility.Visible;
+            AlarmLabelTextbox.Text = "";
         }
 
         //Edit Alarm Window
@@ -187,44 +189,29 @@ namespace SENG403_AlarmClock_V3
                 if (u.currentState == State.EDIT)
                 {
                     u.currentState = State.IDLE;
-                    TimeSpan ts = timePicker.Time;
-                    string label = AlarmLabelTextbox.Text;
-                    if (!repeatCheckbox.IsChecked == true)
+                    u.alarm.label = AlarmLabelTextbox.Text;
+                    int index = alarmtoneSelector.SelectedIndex;
+                    if (repeatCheckbox.IsChecked == true)
                     {
-                        u.setOneTimeAlarm(DateTime.Today.Add(ts), label);
+                        DateTime alarmTime = currentTime.Date.Date.Add(timePicker.Time);
+                        int mask = 0;
+                        if (CheckBox_Sun.IsChecked == true) mask |= (1 << (int)DayOfWeek.Sunday);
+                        if (CheckBox_Mon.IsChecked == true) mask |= (1 << (int)DayOfWeek.Monday);
+                        if (CheckBox_Tue.IsChecked == true) mask |= (1 << (int)DayOfWeek.Tuesday);
+                        if (CheckBox_Wed.IsChecked == true) mask |= (1 << (int)DayOfWeek.Wednesday);
+                        if (CheckBox_Thu.IsChecked == true) mask |= (1 << (int)DayOfWeek.Thursday);
+                        if (CheckBox_Fri.IsChecked == true) mask |= (1 << (int)DayOfWeek.Friday);
+                        if (CheckBox_Sat.IsChecked == true) mask |= (1 << (int)DayOfWeek.Saturday);
+                        u.alarm.setRepeatingNotificationTime(mask, alarmTime);
+                        u.updateDisplay();
                     }
-                    else if (Monday.IsChecked == true)
+                    else
                     {
-                        u.setWeeklyAlarm(DayOfWeek.Monday, ts, label);
+                        DateTime alarmTime = datePicker.Date.Date.Add(timePicker.Time);
+                        u.alarm.setOnetimeAlarm(alarmTime);
+                        u.updateDisplay();
                     }
-                    else if (Tuesday.IsChecked == true)
-                    {
-                        u.setWeeklyAlarm(DayOfWeek.Tuesday, ts, label);
-                    }
-                    else if (Wednesday.IsChecked == true)
-                    {
-                        u.setWeeklyAlarm(DayOfWeek.Wednesday, ts, label);
-                    }
-                    else if (Thursday.IsChecked == true)
-                    {
-                        u.setWeeklyAlarm(DayOfWeek.Thursday, ts, label);
-                    }
-                    else if (Friday.IsChecked == true)
-                    {
-                        u.setWeeklyAlarm(DayOfWeek.Friday, ts, label);
-                    }
-                    else if (Saturday.IsChecked == true)
-                    {
-                        u.setWeeklyAlarm(DayOfWeek.Saturday, ts, label);
-                    }
-                    else if (Sunday.IsChecked == true)
-                    {
-                        u.setWeeklyAlarm(DayOfWeek.Sunday, ts, label);
-                    }
-                    else if (Daily.IsChecked == true)
-                    {
-                        u.setDailyAlarm(ts, label);
-                    }
+                    u.alarm.alarmToneIndex = index;
                 }
             }
             EditAlarmPage.Visibility = Visibility.Collapsed;
@@ -264,7 +251,10 @@ namespace SENG403_AlarmClock_V3
             foreach (AlarmUserControl u in AlarmList_Panel.Children)
             {
                 if (u.alarm.currentState.Equals(AlarmState.FIRST_TO_GO_OFF))
-                    u.alarm.updateAlarmTime();
+                {
+                    u.updateAlarmTime();
+                    u.alarm.mediaPlayer.Pause();
+                }
             }
             AlarmNotification.Visibility = Visibility.Collapsed;
             AlarmsManager.IS_ALARM_NOTIFICATION_OPEN = false;
@@ -279,9 +269,18 @@ namespace SENG403_AlarmClock_V3
             AlarmsManager.IS_ALARM_NOTIFICATION_OPEN = false;
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void DailyCheckboxChecked(object sender, RoutedEventArgs e)
         {
+            CheckBox_Sun.IsChecked = CheckBox_Mon.IsChecked = 
+                CheckBox_Tue.IsChecked = CheckBox_Wed.IsChecked = CheckBox_Thu.IsChecked =
+                CheckBox_Fri.IsChecked = CheckBox_Sat.IsChecked = true;
+        }
 
+        private void DailyCheckboxUnchecked(object sender, RoutedEventArgs e)
+        {
+            CheckBox_Sun.IsChecked = CheckBox_Mon.IsChecked =
+                CheckBox_Tue.IsChecked = CheckBox_Wed.IsChecked = CheckBox_Thu.IsChecked =
+                CheckBox_Fri.IsChecked = CheckBox_Sat.IsChecked = false;
         }
     }
 }

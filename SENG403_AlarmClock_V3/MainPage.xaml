@@ -39,14 +39,14 @@
             <Rectangle Fill="Black" HorizontalAlignment="Left" Height="640" Stroke="Black" VerticalAlignment="Top" Width="360"/>
             <Grid x:Name="repeatedAlarms" Visibility="Collapsed">
                 <Grid Margin="69,201,28,281">
-                    <CheckBox x:Name="Monday" Foreground ="White" Content="Monday" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,0,0,0"/>
-                    <CheckBox x:Name="Tuesday" Foreground ="White" Content="Tuesday" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,0,0,0"/>
-                    <CheckBox x:Name="Wednesday" Foreground ="White" Content="Wednesday" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,31,0,0"/>
-                    <CheckBox x:Name="Thursday" Foreground ="White" Content="Thursday" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,31,0,0"/>
-                    <CheckBox x:Name="Friday" Content="Friday" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,62,0,0"/>
-                    <CheckBox x:Name="Saturday" Content="Saturday" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,62,0,0"/>
-                    <CheckBox x:Name="Sunday" Content="Sunday" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,93,0,0"/>
-                    <CheckBox x:Name="Daily" Content="Daily" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,93,0,0" IsChecked="True"/>
+                    <CheckBox x:Name="CheckBox_Mon" Foreground ="White" Content="Monday" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,0,0,0"/>
+                    <CheckBox x:Name="CheckBox_Tue" Foreground ="White" Content="Tuesday" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,0,0,0"/>
+                    <CheckBox x:Name="CheckBox_Wed" Foreground ="White" Content="Wednesday" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,31,0,0"/>
+                    <CheckBox x:Name="CheckBox_Thu" Foreground ="White" Content="Thursday" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,31,0,0"/>
+                    <CheckBox x:Name="CheckBox_Fri" Content="Friday" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,62,0,0"/>
+                    <CheckBox x:Name="CheckBox_Sat" Content="Saturday" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,62,0,0"/>
+                    <CheckBox x:Name="CheckBox_Sun" Content="Sunday" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,93,0,0"/>
+                    <CheckBox x:Name="CheckBox_Daily" Content="Daily" Foreground ="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="143,93,0,0" Checked="DailyCheckboxChecked" Unchecked="DailyCheckboxUnchecked"/>
                 </Grid>
             </Grid>
             <Button x:Name="CancelButton" FontSize="20" Background="#931100" Foreground="White" Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="34,540,0,0" Height="42" Width="140" Click="CancelEditAlarmButtonClicked"/>
@@ -58,7 +58,7 @@
             <TextBlock HorizontalAlignment="Left" Foreground ="White" Margin="120,10,0,0" TextWrapping="Wrap" Text="Edit Alarm" VerticalAlignment="Top" FontSize="24" FontWeight="Bold"/>
             <TextBlock HorizontalAlignment="Left" Foreground="White" Margin="36,426,0,0" TextWrapping="Wrap" Text="Label" VerticalAlignment="Top"/>
             <TextBlock HorizontalAlignment="Left" Foreground="White"  Margin="34,362,0,0" TextWrapping="Wrap" Text="Alarm Tone" VerticalAlignment="Top"/>
-            <ComboBox x:Name="alarmtoneSelector" HorizontalAlignment="Left" Margin="34,387,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged"/>
+            <ComboBox x:Name="alarmtoneSelector" HorizontalAlignment="Left" Margin="34,387,0,0" VerticalAlignment="Top" Width="120"/>
         </Grid>
         <Grid x:Name="AlarmNotification" Visibility="Collapsed">
             <Rectangle Fill="Black" HorizontalAlignment="Left" Height="640" Stroke="Black" VerticalAlignment="Top" Width="360"/>

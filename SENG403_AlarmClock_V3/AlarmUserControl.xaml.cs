@@ -37,15 +37,6 @@ namespace SENG403_AlarmClock_V3
             this.alarm = alarm;
         }
 
-        private void EnableDisableAlarm_Button_Click(object sender, RoutedEventArgs e)
-        {
-            if (!alarm.initialized) return;
-            if (EnableDisableAlarm_Button.Content.Equals("Enable"))
-                enable();
-            else
-                disable();
-        }
-
         private void EditAlarm_Click(object sender, RoutedEventArgs e)
         {
             currentState = State.EDIT;
@@ -76,61 +67,28 @@ namespace SENG403_AlarmClock_V3
                 AlarmTimeLabel.Text = "Alarm Not Set";
                 return;
             }
-            if (alarm.repeatIntervalDays == 7)
-            {
-                if (alarm.defaultNotificationTime.DayOfWeek == DayOfWeek.Monday) AlarmTypeLabel.Text = "Monday";
-                if (alarm.defaultNotificationTime.DayOfWeek == DayOfWeek.Tuesday) AlarmTypeLabel.Text = "Tuesday";
-                if (alarm.defaultNotificationTime.DayOfWeek == DayOfWeek.Wednesday) AlarmTypeLabel.Text = "Wednesday";
-                if (alarm.defaultNotificationTime.DayOfWeek == DayOfWeek.Thursday) AlarmTypeLabel.Text = "Thursday";
-                if (alarm.defaultNotificationTime.DayOfWeek == DayOfWeek.Friday) AlarmTypeLabel.Text = "Friday";
-                if (alarm.defaultNotificationTime.DayOfWeek == DayOfWeek.Saturday) AlarmTypeLabel.Text = "Saturday";
-                if (alarm.defaultNotificationTime.DayOfWeek == DayOfWeek.Sunday) AlarmTypeLabel.Text = "Sunday";
-                AlarmTimeLabel.Text = alarm.defaultNotificationTime.TimeOfDay.ToString();
-            }
-            else if (alarm.repeatIntervalDays == 1)
+
+            if (alarm.alarmNotificationDaysMask == (1 << 7) - 1)
             {
                 AlarmTypeLabel.Text = "Daily";
                 AlarmTimeLabel.Text = alarm.defaultNotificationTime.TimeOfDay.ToString();
-            }
-            else if (alarm.repeatIntervalDays == -1)
+            } else if (alarm.alarmNotificationDaysMask == 0)
             {
-                AlarmTypeLabel.Text = "No Repeat";
+                AlarmTypeLabel.Text = "No repeat";
                 AlarmTimeLabel.Text = alarm.defaultNotificationTime.ToString();
+            } else {
+                string type = "";
+                if ((alarm.alarmNotificationDaysMask & (1 << (int)DayOfWeek.Sunday)) != 0) type += "Su ";
+                if ((alarm.alarmNotificationDaysMask & (1 << (int)DayOfWeek.Monday)) != 0) type += "M ";
+                if ((alarm.alarmNotificationDaysMask & (1 << (int)DayOfWeek.Tuesday)) != 0) type += "Tu ";
+                if ((alarm.alarmNotificationDaysMask & (1 << (int)DayOfWeek.Wednesday)) != 0) type += "W ";
+                if ((alarm.alarmNotificationDaysMask & (1 << (int)DayOfWeek.Thursday)) != 0) type += "Th ";
+                if ((alarm.alarmNotificationDaysMask & (1 << (int)DayOfWeek.Friday)) != 0) type += "F ";
+                if ((alarm.alarmNotificationDaysMask & (1 << (int)DayOfWeek.Saturday)) != 0) type += "Sa ";
+                AlarmTypeLabel.Text = type;
+                AlarmTimeLabel.Text = alarm.defaultNotificationTime.TimeOfDay.ToString();
             }
             AlarmLabel.Text = alarm.label;
-        }
-
-        /// <summary>
-        /// Helper method for setting an alarm that only goes off once.
-        /// </summary>
-        internal void setOneTimeAlarm(DateTime alarmTime, string label)
-        {
-            alarm.setOneTimeAlarm(alarmTime);
-            if (label.Equals("")) alarm.label = "Unlabelled alarm";
-            else alarm.label = label;
-            updateDisplay();
-        }
-
-        /// <summary>
-        /// Helper method for setting an alarm that only goes off weekly.
-        /// </summary>
-        internal void setWeeklyAlarm(DayOfWeek alarmDay, TimeSpan alarmTime, string label)
-        {
-            alarm.setWeeklyAlarm(alarmDay, alarmTime);
-            if (label.Equals("")) alarm.label = "Unlabelled alarm";
-            else alarm.label = label;
-            updateDisplay();
-        }
-
-        /// <summary>
-        /// Helper method for setting an alarm that only goes off daily.
-        /// </summary>
-        internal void setDailyAlarm(TimeSpan ts, string label)
-        {
-            alarm.setDailyAlarm(ts);
-            if (label.Equals("")) alarm.label = "Unlabelled alarm";
-            else alarm.label = label;
-            updateDisplay();
         }
 
         /// <summary>
@@ -140,7 +98,7 @@ namespace SENG403_AlarmClock_V3
         /// <param name="currentTime"></param>
         internal void requestAlarmWithCheck(DateTime currentTime)
         {
-            if (!AlarmEnabledToggle.IsOn || alarm.currentState != AlarmState.IDLE) return;
+            if (!alarm.initialized || !AlarmEnabledToggle.IsOn || alarm.currentState != AlarmState.IDLE) return;
             if (alarm.currentNotificationTime.CompareTo(currentTime) <= 0)
             {
                 if (!AlarmsManager.IS_ALARM_NOTIFICATION_OPEN)
@@ -152,7 +110,6 @@ namespace SENG403_AlarmClock_V3
                 }
                 else
                 {
-                    EnableDisableAlarm_Button.Visibility = Visibility.Collapsed;
                     EditAlarm_Button.Visibility = Visibility.Collapsed;
                     DismissAlarmButton.Visibility = Visibility.Visible;
                     SnoozeAlarmButton.Visibility = Visibility.Visible;
@@ -163,17 +120,16 @@ namespace SENG403_AlarmClock_V3
 
         private void DismissAlarmButtonClick(object sender, RoutedEventArgs e)
         {
-            EnableDisableAlarm_Button.Visibility = Visibility.Visible;
             EditAlarm_Button.Visibility = Visibility.Visible;
             DismissAlarmButton.Visibility = Visibility.Collapsed;
             SnoozeAlarmButton.Visibility = Visibility.Collapsed;
             WarningMessage.Visibility = Visibility.Collapsed;
+            alarm.mediaPlayer.Pause();
             alarm.updateAlarmTime();
         }
 
         private void SnoozeAlarmButtonClick(object sender, RoutedEventArgs e)
         {
-            EnableDisableAlarm_Button.Visibility = Visibility.Visible;
             EditAlarm_Button.Visibility = Visibility.Visible;
             DismissAlarmButton.Visibility = Visibility.Collapsed;
             SnoozeAlarmButton.Visibility = Visibility.Collapsed;
@@ -197,6 +153,14 @@ namespace SENG403_AlarmClock_V3
         {
             alarm.enabled = true;
             AlarmEnabledToggle.IsOn = true;
+        }
+
+        internal void updateAlarmTime()
+        {
+            if (alarm.oneTimeAlarm)
+                AlarmEnabledToggle.IsOn = false;
+            else
+                alarm.updateAlarmTime();
         }
     }
 }
