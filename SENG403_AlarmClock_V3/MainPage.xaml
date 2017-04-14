@@ -27,7 +27,7 @@
         <TextBlock x:Name="MinuteText" Foreground="White" FontSize="25" HorizontalAlignment="Left" TextWrapping="Wrap" Text=":20" VerticalAlignment="Top" Margin="197,119,0,0"/>
         <TextBlock x:Name="AMPMText" Foreground="White" FontSize="32" HorizontalAlignment="Left" TextWrapping="Wrap" Text="AM" VerticalAlignment="Top" Height="40" Width="63" Margin="238,112,0,0"/>
         <TextBlock x:Name="DayDateText" Foreground="White" FontSize="24" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Munday, March 66, 2917" VerticalAlignment="Top" Margin="60,166,0,0"/>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,215,10,56" >
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,215,10,50" >
             <StackPanel x:Name="AlarmList_Panel" HorizontalAlignment="Left" Height="Auto" VerticalAlignment="Top" Width="340" />
         </ScrollViewer>
         <Image HorizontalAlignment="Left" Height="65" VerticalAlignment="Top" Width="233" Margin="60,0,0,0">

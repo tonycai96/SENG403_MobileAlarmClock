@@ -24,9 +24,9 @@ namespace SENG403_AlarmClock_V3
     public sealed partial class MainPage : Page
     {
         public static DateTime currentTime;
-        public static String[] AlarmSoundsList= new String[] {"Alarm 1", "Alarm 2", "Alarm 3"};
+        public static String[] AlarmSoundsList= new String[] {"Careless Whisper", "Missile Alert", "Fog Horn"};
         public DispatcherTimer dispatcherTimer = new DispatcherTimer();
-
+       
         /// <summary>
         /// The name of the file which stores alarm information.
         /// </summary>
@@ -93,6 +93,7 @@ namespace SENG403_AlarmClock_V3
                 if (u.alarm.currentState == AlarmState.FIRST_TO_GO_OFF)
                 {
                     openAlarmNotificationWindow(u.alarm.label);
+                    u.alarm.playAlarmSound();
                     AlarmsManager.IS_ALARM_NOTIFICATION_OPEN = true;
                 }
             }
@@ -253,7 +254,7 @@ namespace SENG403_AlarmClock_V3
                 if (u.alarm.currentState.Equals(AlarmState.FIRST_TO_GO_OFF))
                 {
                     u.updateAlarmTime();
-                    u.alarm.mediaPlayer.Pause();
+                    try { u.alarm.mediaPlayer.Pause(); } catch (Exception exc) { }
                 }
             }
             AlarmNotification.Visibility = Visibility.Collapsed;
@@ -264,7 +265,10 @@ namespace SENG403_AlarmClock_V3
         {
             foreach (AlarmUserControl u in AlarmList_Panel.Children)
                 if (u.alarm.currentState == AlarmState.FIRST_TO_GO_OFF)
+                {
                     u.alarm.snooze();
+                    try { u.alarm.mediaPlayer.Pause(); } catch (Exception exc) { }
+                }
             AlarmNotification.Visibility = Visibility.Collapsed;
             AlarmsManager.IS_ALARM_NOTIFICATION_OPEN = false;
         }

@@ -8,25 +8,26 @@
              Width="325" Height="90"
              d:DesignHeight="70" d:DesignWidth="325">
     <Border BorderBrush="Transparent" BorderThickness="2,2,2,6">
-        <Grid Background="#c6c6c6">
+        <Grid x:Name="bg" Background="#c6c6c6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="87*"/>
                 <ColumnDefinition Width="20*"/>
             </Grid.ColumnDefinitions>
 
+            <ToggleSwitch x:Name="AlarmEnabledToggle" HorizontalAlignment="Stretch"  Margin="229,33,-62,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Toggled="AlarmEnableToggled"/>
+
             <TextBlock x:Name="AlarmTypeLabel" Foreground="Black" Text="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="22,52,0,0" Height="21"/>
             <TextBlock x:Name="AlarmTimeLabel" Foreground="Black" Text="Alarm Not Set" HorizontalAlignment="Left" Margin="21,33,0,0" VerticalAlignment="Top" Height="19" FontSize="12"/>
 
             <Button x:Name="EditAlarm_Button" Background="#2148bc" FontSize="16" Foreground="White" Content="Edit" HorizontalAlignment="Left" Margin="150,33,0,0" VerticalAlignment="Top" Width="65" RenderTransformOrigin="0.2,0.5" Height="38" Click="EditAlarm_Click"/>
-            <Button x:Name="SnoozeAlarmButton" Visibility="Collapsed" Background="DarkBlue" FontSize="10" Foreground="White" Content="Snooze" HorizontalAlignment="Left" Margin="170,33,0,0" VerticalAlignment="Top" Width="65" RenderTransformOrigin="0.202,0.672" Height="23" Click="SnoozeAlarmButtonClick"/>
+            <Button x:Name="SnoozeAlarmButton" Visibility="Collapsed" Background="DarkBlue" FontSize="14" Foreground="White" Content="Snooze" HorizontalAlignment="Left" Margin="150,33,0,0" VerticalAlignment="Top" Width="65" RenderTransformOrigin="0.202,0.672" Height="38" Click="SnoozeAlarmButtonClick"/>
 
             <Button x:Name="DeleteAlarm_Button" Background="Transparent"  HorizontalAlignment="Left" Margin="45.375,0,0,0" VerticalAlignment="Top" Width="15" Height="15" RenderTransformOrigin="0.333,0.2" Click="DeleteAlarm_Click" Grid.Column="1">
                 <Image x:Name="DeleteButtonImage" Source="Images/x_button.png" HorizontalAlignment="Left" Margin="-10,-6,-5,-6" Width="15"/>
             </Button>
-            <Button x:Name="DismissAlarmButton" FontSize="10" Visibility="Collapsed" Background="DarkBlue" Foreground="White" Content="Dismiss" HorizontalAlignment="Left" Margin="245,33,0,0" VerticalAlignment="Top" Width="66" Click="DismissAlarmButtonClick" Height="23" RenderTransformOrigin="-0.545,1.304" Grid.ColumnSpan="2"/>
-            <TextBlock x:Name="AlarmLabel" Foreground="Black" Text="Take Medicine" HorizontalAlignment="Left" Margin="21,5,0,0" VerticalAlignment="Top" Height="23" FontWeight="Bold" Width="268" Grid.ColumnSpan="2"/>
+            <Button x:Name="DismissAlarmButton" FontSize="14" Visibility="Collapsed" Background="DarkBlue" Foreground="White" Content="Dismiss" HorizontalAlignment="Left" Margin="229,35,0,0" VerticalAlignment="Top" Width="82" Click="DismissAlarmButtonClick" Height="36" RenderTransformOrigin="-0.545,1.304" Grid.ColumnSpan="2"/>
+            <TextBlock x:Name="AlarmLabel" Foreground="Black" Text="Alarm" HorizontalAlignment="Left" Margin="21,5,0,0" VerticalAlignment="Top" Height="23" FontWeight="Bold" Width="268" Grid.ColumnSpan="2"/>
             <TextBlock x:Name="WarningMessage" Visibility="Collapsed" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Require Attention" VerticalAlignment="Top" Margin="170,8,0,0"/>
-            <ToggleSwitch x:Name="AlarmEnabledToggle" HorizontalAlignment="Stretch"  Margin="229,33,-62,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
 
         </Grid>
     </Border>

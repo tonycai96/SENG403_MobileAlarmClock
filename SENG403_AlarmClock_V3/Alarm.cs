@@ -60,7 +60,7 @@ namespace SENG403_AlarmClock_V3
         public bool oneTimeAlarm { get; set; }
 
         [DataMember]
-        internal int alarmToneIndex = 0;
+        public int alarmToneIndex { get; set; }
 
         private const string DEFAULT_ALARM_SOUND = "missileAlert.wav";
         
@@ -68,13 +68,14 @@ namespace SENG403_AlarmClock_V3
 
         public Alarm(double snoozeTime)
         {
+            alarmToneIndex = 0;
             label = "An alarm";
             currentState = AlarmState.IDLE;
             enabled = initialized = false;
             this.snoozeTime = snoozeTime;
         }
 
-        private string[] alarmSoundList = new string[] { "missileAlert.wav", "fogHorn.wav", "troll.wav" };
+        private static string[] alarmSoundList = new string[] { "troll.wav", "missileAlert.wav", "fogHorn.wav" };
 
         public void playAlarmSound()
         {
@@ -95,9 +96,8 @@ namespace SENG403_AlarmClock_V3
 
         public void snooze()
         {
-            mediaPlayer.Pause();
             currentState = AlarmState.IDLE;
-            currentNotificationTime = MainPage.currentTime.AddMinutes(snoozeTime);
+            currentNotificationTime = MainPage.currentTime.AddMinutes(AlarmsManager.SNOOZE_TIME);
         }
 
         /// <summary>
@@ -105,7 +105,6 @@ namespace SENG403_AlarmClock_V3
         /// </summary>
         internal void updateAlarmTime()
         {
-            mediaPlayer.Pause();
             currentState = AlarmState.IDLE;
             if (oneTimeAlarm)
             {
@@ -129,7 +128,7 @@ namespace SENG403_AlarmClock_V3
             while (((1<<cur) & alarmNotificationDaysMask) == 0)
             {
                 cur = (cur + 1) % 7;
-                defaultNotificationTime.AddDays(1);
+                defaultNotificationTime = defaultNotificationTime.AddDays(1);
             }
             currentNotificationTime = defaultNotificationTime;
         }

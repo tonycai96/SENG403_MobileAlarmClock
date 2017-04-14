@@ -29,6 +29,9 @@ namespace SENG403_AlarmClock_V3
         public Alarm alarm { get; set; }
 
         public State currentState = State.IDLE;
+        private Color WARNING_COLOR = Color.FromArgb(0xFF, 255, 81, 81);
+        private Color DEFAULT_COLOR = Color.FromArgb(0xFF, 0xc6, 0xc6, 0xc6);
+
 
         public AlarmUserControl(MainPage page, Alarm alarm)
         {
@@ -67,7 +70,8 @@ namespace SENG403_AlarmClock_V3
                 AlarmTimeLabel.Text = "Alarm Not Set";
                 return;
             }
-
+            if (alarm.enabled)
+                AlarmEnabledToggle.IsOn = true;
             if (alarm.alarmNotificationDaysMask == (1 << 7) - 1)
             {
                 AlarmTypeLabel.Text = "Daily";
@@ -88,7 +92,8 @@ namespace SENG403_AlarmClock_V3
                 AlarmTypeLabel.Text = type;
                 AlarmTimeLabel.Text = alarm.defaultNotificationTime.TimeOfDay.ToString();
             }
-            AlarmLabel.Text = alarm.label;
+            if (!String.IsNullOrEmpty(alarm.label))
+                AlarmLabel.Text = alarm.label;
         }
 
         /// <summary>
@@ -98,7 +103,7 @@ namespace SENG403_AlarmClock_V3
         /// <param name="currentTime"></param>
         internal void requestAlarmWithCheck(DateTime currentTime)
         {
-            if (!alarm.initialized || !AlarmEnabledToggle.IsOn || alarm.currentState != AlarmState.IDLE) return;
+            if (!alarm.initialized || !alarm.enabled || alarm.currentState != AlarmState.IDLE) return;
             if (alarm.currentNotificationTime.CompareTo(currentTime) <= 0)
             {
                 if (!AlarmsManager.IS_ALARM_NOTIFICATION_OPEN)
@@ -110,7 +115,9 @@ namespace SENG403_AlarmClock_V3
                 }
                 else
                 {
+                    bg.Background = new SolidColorBrush(WARNING_COLOR);
                     EditAlarm_Button.Visibility = Visibility.Collapsed;
+                    AlarmEnabledToggle.Visibility = Visibility.Collapsed;
                     DismissAlarmButton.Visibility = Visibility.Visible;
                     SnoozeAlarmButton.Visibility = Visibility.Visible;
                     alarm.currentState = AlarmState.SIDE_NOTIFICATION;
@@ -120,17 +127,20 @@ namespace SENG403_AlarmClock_V3
 
         private void DismissAlarmButtonClick(object sender, RoutedEventArgs e)
         {
-            EditAlarm_Button.Visibility = Visibility.Visible;
+            alarm.updateAlarmTime();
+            if (alarm.oneTimeAlarm) AlarmEnabledToggle.IsOn = false;
+            bg.Background = new SolidColorBrush(DEFAULT_COLOR);
             DismissAlarmButton.Visibility = Visibility.Collapsed;
             SnoozeAlarmButton.Visibility = Visibility.Collapsed;
-            WarningMessage.Visibility = Visibility.Collapsed;
-            alarm.mediaPlayer.Pause();
-            alarm.updateAlarmTime();
+            EditAlarm_Button.Visibility = Visibility.Visible;
+            AlarmEnabledToggle.Visibility = Visibility.Visible;
         }
 
         private void SnoozeAlarmButtonClick(object sender, RoutedEventArgs e)
         {
             EditAlarm_Button.Visibility = Visibility.Visible;
+            AlarmEnabledToggle.Visibility = Visibility.Visible;
+            bg.Background = new SolidColorBrush(DEFAULT_COLOR);
             DismissAlarmButton.Visibility = Visibility.Collapsed;
             SnoozeAlarmButton.Visibility = Visibility.Collapsed;
             WarningMessage.Visibility = Visibility.Collapsed;
@@ -161,6 +171,14 @@ namespace SENG403_AlarmClock_V3
                 AlarmEnabledToggle.IsOn = false;
             else
                 alarm.updateAlarmTime();
+        }
+
+        private void AlarmEnableToggled(object sender, RoutedEventArgs e)
+        {
+            if (AlarmEnabledToggle.IsOn)
+                alarm.enabled = true;
+            else
+                alarm.enabled = false;
         }
     }
 }
